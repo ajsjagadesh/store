@@ -1,0 +1,8 @@
+pip3 install fastapi
+pip3 install "uvicorn[standard]"
+pip3 install pydantic
+pip3 install python-jose
+sudo pip3 install sqlalchemy
+sudo -H pip3 install alembic --> export PATH="/Library/Frameworks/Python.framework/Versions/3.9/bin:$PATH"
+pip3 install bcrypt
+pip3 install passlib

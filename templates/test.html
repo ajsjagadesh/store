@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+</head>
+<body>
+    <button id="logoutButton">Logout</button>
+    <p>{{Name}}</p>
+    <p>{{Test - 100 - 12}}</p>
+
+    <form id="myForm" action="/item" method="POST">
+       
+        <!-- <input type="hidden" id="tokenField" name="token" value=""><br> -->
+        <label for="item_name">item_name</label> <input type="text" name="item_name" id="item_name"><br>
+        <label for="item_description">item_description</label><input type="text" name="item_description" id="item_description"><br>
+        <label for="item_quantity">item_quantity</label> <input type="text" name="item_quantity" id="item_quantity"><br>
+        <label for="item_price">item_price</label> <input type="text" name="item_price" id="item_price"><br>
+        <label for="category">category</label><input type="text" name="category" id="category"><br>
+        <label for="manufacture_date">manufacture_date</label><input type="datetime-local" name="manufacture_date" id="manufacture_date"><br>
+        <label for="expiry_date">expiry_date</label><input type="datetime-local" name="expiry_date" id="expiry_date"><br>
+        <label for="units">units</label><input type="text" name="units" id="units"><br>
+        <label for="discount">discount</label><input type="text" name="discount" id="discount"><br>
+        <!-- Other form fields go here -->
+        <button type="submit">Submit</button>
+    </form>
+</body>
+<script>
+    const token = localStorage.getItem('access_token');
+    document.getElementById('myForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(document.getElementById('myForm'));
+        
+        // Set the token as a header
+        const headers = { 'Authorization': `bearer ${token}` };
+
+        try {
+            const response = await fetch('/v2/item', {
+                method: 'POST',
+                body: formData,
+                headers: headers
+            });
+            const data = await response.json();
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+     // Function to clear the access_token cookie
+     function clearAccessTokenCookie() {
+        document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    }
+
+    // Logout button click event listener
+    document.getElementById('logoutButton').addEventListener('click', () => {
+        // Clear access token from local storage
+        localStorage.setItem('access_token', null);
+        clearAccessTokenCookie(); // Clear the access_token cookie
+        // sessionStorage.removeItem('access_token');
+        window.location.href = "/v2/login_test"; // Replace with the URL of your login page
+    });
+</script>
+</html>
